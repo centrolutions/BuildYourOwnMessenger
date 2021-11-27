@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BuildYourOwnMessenger.Services
 {
-    public class Messenger : IMessenger
+    public class Messenger
     {
         ConcurrentDictionary<Type, SynchronizedCollection<Subscription>> _Subscriptions = new();
         ConcurrentDictionary<Type, object> _CurrentState = new();
@@ -29,7 +29,7 @@ namespace BuildYourOwnMessenger.Services
             var newSubscription = new Subscription(subscriber, action);
             if (!_Subscriptions.ContainsKey(typeof(TMessage)))
                 _Subscriptions.TryAdd(typeof(TMessage), new SynchronizedCollection<Subscription>());
-
+            
             _Subscriptions[typeof(TMessage)].Add(newSubscription);
             if (_CurrentState.ContainsKey(typeof(TMessage)))
                 newSubscription.Action(_CurrentState[typeof(TMessage)]);

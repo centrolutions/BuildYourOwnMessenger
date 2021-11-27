@@ -1,10 +1,7 @@
-﻿using BuildYourOwnMessenger.Messages;
-using BuildYourOwnMessenger.Properties;
-using BuildYourOwnMessenger.Services;
+﻿using BuildYourOwnMessenger.Services;
 using BuildYourOwnMessenger.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
-using System;
 using System.Windows;
 
 namespace BuildYourOwnMessenger
@@ -17,13 +14,6 @@ namespace BuildYourOwnMessenger
         public App()
         {
             SetupDependencyInjection();
-            LoadSettings();
-        }
-
-        private void LoadSettings()
-        {
-            var messenger = Ioc.Default.GetService<IMessenger>();
-            messenger.Send(new OnlineStatusChangedMessage(Settings.Default.WorkOnline));
         }
 
         private void SetupDependencyInjection()
@@ -31,7 +21,6 @@ namespace BuildYourOwnMessenger
             Ioc.Default.ConfigureServices(
                 new ServiceCollection()
                     .AddSingleton<IDialogService, DialogService>()
-                    .AddSingleton<IMessenger, Messenger>()
                     .AddSingleton<IOrderCheckerService, OrderCheckerService>()
                     .AddViewModels<ViewModelBase>()
                     .BuildServiceProvider()

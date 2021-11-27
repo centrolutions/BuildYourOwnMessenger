@@ -1,7 +1,5 @@
-﻿using BuildYourOwnMessenger.Messages;
-using BuildYourOwnMessenger.Services;
+﻿using BuildYourOwnMessenger.Services;
 using Microsoft.Toolkit.Mvvm.Input;
-using System;
 using System.Windows.Input;
 
 namespace BuildYourOwnMessenger.ViewModels
@@ -10,7 +8,6 @@ namespace BuildYourOwnMessenger.ViewModels
     {
         private readonly IDialogService _DialogService;
         private readonly IOrderCheckerService _OrderChecker;
-        private readonly IMessenger _Messenger;
 
         string _OnlineStatus;
         public string OnlineStatus
@@ -28,20 +25,13 @@ namespace BuildYourOwnMessenger.ViewModels
 
         public ICommand OpenSettingsCommand { get; }
 
-        public MainViewModel(IDialogService dialogService, IOrderCheckerService orderChecker, IMessenger messenger)
+        public MainViewModel(IDialogService dialogService, IOrderCheckerService orderChecker)
         {
             OpenSettingsCommand = new RelayCommand(OpenSettings);
             _DialogService = dialogService;
             _OrderChecker = orderChecker;
-            _Messenger = messenger;
-            _Messenger.Subscribe<OnlineStatusChangedMessage>(this, OnlineStatusChanged);
             _OrderChecker.OrderCountChanged += OrderChecker_OrderCountChanged;
-        }
-
-        private void OnlineStatusChanged(object obj)
-        {
-            var msg = (OnlineStatusChangedMessage)obj;
-            SetOnlineStatus(msg.IsOnline);
+            SetOnlineStatus(true);
         }
 
         private void OrderChecker_OrderCountChanged(object? sender, System.EventArgs e)
