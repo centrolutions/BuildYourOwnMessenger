@@ -1,0 +1,34 @@
+﻿<Window x:Class="BuildYourOwnMessenger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BuildYourOwnMessenger"
+        mc:Ignorable="d"
+        DataContext="{Binding Path=Main, Source={StaticResource ViewModelLocator}}"
+        Title="Main" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ToolBarTray>
+            <ToolBar Band="1" BandIndex="1">
+                <Button Command="{Binding OpenSettingsCommand}" Content="Settings" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <Label Content="{Binding OnlineStatus}" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Orders:" />
+                    <Label Content="{Binding OrderCount}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
