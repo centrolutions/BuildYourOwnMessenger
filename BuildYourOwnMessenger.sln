@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildYourOwnMessenger", "BuildYourOwnMessenger\BuildYourOwnMessenger.csproj", "{EEBE9ADE-3043-48B1-9E9B-612972C5EF96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildYourOwnMessenger", "BuildYourOwnMessenger\BuildYourOwnMessenger.csproj", "{EEBE9ADE-3043-48B1-9E9B-612972C5EF96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildYourOwnMessenger.Tests", "BuildYourOwnMessenger.Tests\BuildYourOwnMessenger.Tests.csproj", "{BB91E3E1-0434-48A9-93B7-D9D1323CE710}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EEBE9ADE-3043-48B1-9E9B-612972C5EF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEBE9ADE-3043-48B1-9E9B-612972C5EF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEBE9ADE-3043-48B1-9E9B-612972C5EF96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB91E3E1-0434-48A9-93B7-D9D1323CE710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB91E3E1-0434-48A9-93B7-D9D1323CE710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB91E3E1-0434-48A9-93B7-D9D1323CE710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB91E3E1-0434-48A9-93B7-D9D1323CE710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
