@@ -1,10 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿using BuildYourOwnMessenger.Messages;
+using BuildYourOwnMessenger.Services;
+using System.Runtime.CompilerServices;
 
 namespace BuildYourOwnMessenger.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
         bool _IsOnline;
+        private readonly IMessenger _Messenger;
 
         public bool IsOnline
         {
@@ -12,8 +15,9 @@ namespace BuildYourOwnMessenger.ViewModels
             set { SetProperty(ref _IsOnline, value); }
         }
 
-        public SettingsViewModel()
+        public SettingsViewModel(IMessenger messenger)
         {
+            _Messenger = messenger;
             IsOnline = Properties.Settings.Default.WorkOnline;
         }
 
@@ -24,6 +28,7 @@ namespace BuildYourOwnMessenger.ViewModels
             {
                 Properties.Settings.Default.WorkOnline = IsOnline;
                 Properties.Settings.Default.Save();
+                _Messenger.Send(new OnlineStatusChangedMessage(IsOnline));
             }
         }
     }

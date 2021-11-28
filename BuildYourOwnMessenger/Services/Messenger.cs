@@ -5,46 +5,58 @@ using System.Linq;
 
 namespace BuildYourOwnMessenger.Services
 {
-    public class Messenger
+    public class Messenger : IMessenger
     {
         ConcurrentDictionary<Type, SynchronizedCollection<Subscription>> _Subscriptions = new();
         ConcurrentDictionary<Type, object> _CurrentState = new();
 
-        public void Send(object message)
+        public void Send<TMessage>(TMessage message)
         {
             if (message == null)
                 throw new ArgumentNullException(nameof(message));
 
-            _CurrentState.TryAdd(message.GetType(), message);
-
-            if (!_Subscriptions.ContainsKey(message.GetType()))
-                return;
-
-            foreach (var subscription in _Subscriptions[message.GetType()])
-                subscription.Action(message);
+            EnsureSubscriptionDictionaryHasMessageType<TMessage>();
+            var messageType = typeof(TMessage);
+            _CurrentState.AddOrUpdate(messageType, (o) => message, (o, old) => message);
+            foreach (var subscription in _Subscriptions[messageType])
+                SendMessageToSubscriber(message, subscription);
         }
 
         public void Subscribe<TMessage>(object subscriber, Action<object> action)
         {
-            var newSubscription = new Subscription(subscriber, action);
-            if (!_Subscriptions.ContainsKey(typeof(TMessage)))
-                _Subscriptions.TryAdd(typeof(TMessage), new SynchronizedCollection<Subscription>());
-            
-            _Subscriptions[typeof(TMessage)].Add(newSubscription);
-            if (_CurrentState.ContainsKey(typeof(TMessage)))
-                newSubscription.Action(_CurrentState[typeof(TMessage)]);
+            EnsureSubscriptionDictionaryHasMessageType<TMessage>();
+
+            var newSubscriber = new Subscription(subscriber, action);
+            var messageType = typeof(TMessage);
+            _Subscriptions[messageType].Add(newSubscriber);
+            if (_CurrentState.ContainsKey(messageType))
+                SendMessageToSubscriber(_CurrentState[messageType], newSubscriber);
         }
 
         public void Unsubscribe<TMessage>(object subscriber)
         {
-            if (!_Subscriptions.ContainsKey(typeof(TMessage)))
+            var messageType = typeof(TMessage);
+            if (!_Subscriptions.ContainsKey(messageType))
                 return;
 
-            var existingSubscription = _Subscriptions[typeof(TMessage)].FirstOrDefault(x => x.Subscriber == subscriber);
-            if (existingSubscription != null)
-                _Subscriptions[typeof(TMessage)].Remove(existingSubscription);
+            var subscription = _Subscriptions[messageType].FirstOrDefault(x => x.Subscriber == subscriber);
+            if (subscription != null)
+                _Subscriptions[messageType].Remove(subscription);
+        }
+
+
+
+        private void EnsureSubscriptionDictionaryHasMessageType<TMessage>()
+        {
+            if (!_Subscriptions.ContainsKey(typeof(TMessage)))
+                _Subscriptions.TryAdd(typeof(TMessage), new SynchronizedCollection<Subscription>());
+        }
+
+        private static void SendMessageToSubscriber<TMessage>(TMessage message, Subscription subscription)
+        {
+            subscription.Action(message);
         }
     }
 
-    internal record Subscription(object Subscriber, Action<object> Action);
+    public record Subscription(object Subscriber, Action<object> Action);
 }

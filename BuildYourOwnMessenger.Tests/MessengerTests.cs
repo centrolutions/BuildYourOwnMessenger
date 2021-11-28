@@ -31,7 +31,7 @@ namespace BuildYourOwnMessenger.Tests
             var fakeObserver = new Mock<IFakeObserver>();
             var message = new FakeMessage(string.Empty);
             _Sut.Subscribe<FakeMessage>(fakeObserver.Object, fakeObserver.Object.CallMeWithMessage);
-            
+
             _Sut.Unsubscribe<FakeMessage>(fakeObserver.Object);
             _Sut.Send(message);
 
@@ -72,7 +72,7 @@ namespace BuildYourOwnMessenger.Tests
         [Fact]
         public void Send_ThrowsException_WhenMessageIsNull()
         {
-            _Sut.Invoking(x => x.Send(null))
+            _Sut.Invoking(x => x.Send((FakeMessage)null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("message");
         }
 
